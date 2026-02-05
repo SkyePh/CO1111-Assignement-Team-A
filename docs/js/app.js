@@ -1,8 +1,13 @@
-let currentHuntId= null;
+//read the params sent from listChallenges
+const params = new URLSearchParams(window.location.search);
+const currentHuntId = params.get("uuid");
+const currentHuntName = params.get("name");
 let currentSession = null;
 let answerBox =document.getElementById("answerBox");
 const questionBox = document.getElementById("questionBox");
 let userAnswer = null;
+let title = document.getElementById("title");
+title.textContent = currentHuntName;
 
 function submitAnswer(answer) {
     fetch(
@@ -82,13 +87,6 @@ function loadQuestion() {
 
         });
 }
-
-fetch("https://codecyprus.org/th/api/list")
-    .then(r1 => r1.json())
-    .then(data => {
-        currentHuntId = data.treasureHunts[0].uuid;
-        console.log(data);
-    });
 
 const APP_NAME = "co1111-team-a";
 

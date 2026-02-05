@@ -11,10 +11,15 @@ function listChallenges(){
             for (let i = 0; i < treasureHunts.length; i++) {
                 let li = document.createElement("li");
 
-                li.innerHTML = "<a href='https://codecyprus.org/api/start?player=dexter&app=test&treasure-hunt-id=" + treasureHunts[i].uuid + "'>" + treasureHunts[i].name + "</a>";
+                const params = new URLSearchParams({
+                    uuid: treasureHunts[i].uuid,
+                    name: treasureHunts[i].name
+                });
+
+                li.innerHTML = `<a href="./app.html?${params.toString()}">${treasureHunts[i].name}</a>`;
                 ul.appendChild(li);
             }
         });
 }
 
-// listChallenges();
+listChallenges();
