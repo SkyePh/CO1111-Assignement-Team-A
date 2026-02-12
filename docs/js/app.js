@@ -7,6 +7,12 @@ let answerBox =document.getElementById("answerBox");
 const questionBox = document.getElementById("questionBox");
 let userAnswer = null;
 let title = document.getElementById("title");
+
+const APP_NAME = "co1111-team-a";
+const form = document.getElementById("startForm");
+const nameInput = document.getElementById("playerName");
+const scoreValue = document.getElementById("scoreValue");
+
 title.textContent = currentHuntName;
 
 function submitAnswer(answer) {
@@ -21,7 +27,8 @@ function submitAnswer(answer) {
 
             // if accept
             if (a.status === "OK") {
-                loadQuestion(); // ← repeat
+                getScore();
+                loadQuestion();
             }
         });
 }
@@ -88,11 +95,29 @@ function loadQuestion() {
         });
 }
 
-const APP_NAME = "co1111-team-a";
+function startError(errorText){
+    questionBox.innerHTML = errorText;
 
-const form = document.getElementById("startForm");
-const nameInput = document.getElementById("playerName");
+}
 
+function skipQuestion(){
+    //TODO
+}
+
+function getScore() {
+    if (!currentSession) return;
+    fetch("https://codecyprus.org/th/api/score?session=" + currentSession)
+        .then(r => r.json())
+        .then(data => {
+            if (data.status === "OK" && data.score !== undefined) {
+                scoreValue.textContent = data.score;
+            }
+        });
+}
+
+function sendLocation(){
+    //TODO
+}
 
 form.addEventListener("submit", function (event) {
 
@@ -110,10 +135,15 @@ form.addEventListener("submit", function (event) {
         .then(r2 => r2.json())
         .then(data => {
             currentSession = data.session;
-            console.log("start response:", data); // session variable
+            console.log("start response:", data);
+
+            if (data.status === "ERROR") {
+                startError(data.errorMessages[0]);
+                return;
+            }
+
+            form.style.display = "none";
+            getScore();
             loadQuestion();
-
-
-
         });
 });
