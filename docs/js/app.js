@@ -11,6 +11,7 @@ let title = document.getElementById("title");
 const APP_NAME = "co1111-team-a";
 const form = document.getElementById("startForm");
 const nameInput = document.getElementById("playerName");
+const scoreValue = document.getElementById("scoreValue");
 
 title.textContent = currentHuntName;
 
@@ -26,7 +27,8 @@ function submitAnswer(answer) {
 
             // if accept
             if (a.status === "OK") {
-                loadQuestion(); // ← repeat
+                getScore();
+                loadQuestion();
             }
         });
 }
@@ -102,8 +104,15 @@ function skipQuestion(){
     //TODO
 }
 
-function getScore(){
-    //TODO
+function getScore() {
+    if (!currentSession) return;
+    fetch("https://codecyprus.org/th/api/score?session=" + currentSession)
+        .then(r => r.json())
+        .then(data => {
+            if (data.status === "OK" && data.score !== undefined) {
+                scoreValue.textContent = data.score;
+            }
+        });
 }
 
 function sendLocation(){
@@ -134,6 +143,7 @@ form.addEventListener("submit", function (event) {
             }
 
             form.style.display = "none";
+            getScore();
             loadQuestion();
         });
 });
