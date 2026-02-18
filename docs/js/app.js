@@ -7,6 +7,7 @@ let answerBox =document.getElementById("answerBox");
 const questionBox = document.getElementById("questionBox");
 let userAnswer = null;
 let title = document.getElementById("title");
+let locationIntervalId = null;
 
 const APP_NAME = "co1111-team-a";
 const form = document.getElementById("startForm");
@@ -44,6 +45,13 @@ function loadQuestion() {
             questionBox.innerHTML = q.questionText;
             const questionType = q.questionType;
 
+            if (q.completed === true)
+            {
+                questionBox.innerHTML = "Session completed";
+                stopLocationTracking()
+                return;
+            }
+
             answerBox.innerHTML = "";
 
             const label = document.createElement("label");
@@ -77,19 +85,31 @@ function loadQuestion() {
 
 
 
-            const button = document.createElement("button");
-            button.textContent = "Submit";
-            button.type = "button";
+            const submitBtn = document.createElement("button");
+            submitBtn.textContent = "Submit";
+            submitBtn.type = "button";
 
-            button.addEventListener("click", function () {
+            submitBtn.addEventListener("click", function () {
                 submitAnswer(input.value);
             });
+
+            const skipBtn = document.createElement("button");
+            skipBtn.textContent = "Skip";
+            skipBtn.type = "button";
+
+            skipBtn.addEventListener("click", function () {
+                skipQuestion();
+            });
+
+
 
             answerBox.appendChild(label);
             answerBox.appendChild(document.createElement("br"));
             answerBox.appendChild(input);
             answerBox.appendChild(document.createElement("br"));
-            answerBox.appendChild(button);
+            answerBox.appendChild(submitBtn);
+            answerBox.appendChild(document.createElement("br"));
+            answerBox.appendChild(skipBtn);
 
 
         });
@@ -100,9 +120,32 @@ function startError(errorText){
 
 }
 
-function skipQuestion(){
-    //TODO
+function showTemporaryError(message) {
+    const oldContent = questionBox.innerHTML;
+
+    questionBox.innerHTML = message;
+
+    setTimeout(function () {
+        questionBox.innerHTML = oldContent;
+    }, 2000);
 }
+
+function skipQuestion(){
+    fetch(
+        "https://codecyprus.org/th/api/skip?session=" + currentSession
+    )
+        .then(r => r.json())
+        .then(b => {
+            console.log("Skip:", b);
+        if (b.status === "OK") {
+            getScore();
+            loadQuestion()
+        }
+        else
+            showTemporaryError("Cannot skip this question.");
+        });
+}
+
 
 function getScore() {
     if (!currentSession) return;
@@ -115,8 +158,54 @@ function getScore() {
         });
 }
 
-function sendLocation(){
-    //TODO
+    function sendLocation(){
+
+    if (!currentSession) {
+        return;
+    }
+
+    if (!navigator.geolocation) {
+        console.log("Geolocation not supported.");
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+        function (position) {
+
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            fetch(
+                "https://codecyprus.org/th/api/location" +
+                "?session=" + currentSession +
+                "&latitude=" + latitude +
+                "&longitude=" + longitude
+            )
+                .then(r => r.json())
+                .then(data => {
+                    console.log("LOCATION RESPONSE:", data);
+                });
+
+        },
+        function (error) {
+            console.log("Location error:", error.message);
+        }
+    );
+
+}
+
+function startLocationTracking() {
+    if (locationIntervalId !== null) return;
+
+    sendLocation();
+    locationIntervalId = setInterval(sendLocation, 30000); // каждые 30 сек
+}
+
+function stopLocationTracking() {
+    if (locationIntervalId !== null) {
+        clearInterval(locationIntervalId);
+        locationIntervalId = null;
+    }
 }
 
 form.addEventListener("submit", function (event) {
@@ -145,5 +234,7 @@ form.addEventListener("submit", function (event) {
             form.style.display = "none";
             getScore();
             loadQuestion();
+            startLocationTracking();
+
         });
 });
