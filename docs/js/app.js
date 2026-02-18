@@ -53,7 +53,30 @@ function loadQuestion() {
             switch (questionType) {
 
                 case "BOOLEAN":
-                    // code for bool
+                    input = document.createElement("input");
+                    input.type = "hidden";
+
+                    inputContainer = document.createElement("div");
+
+                    let trueChoice = document.createElement("input");
+                    trueChoice.type = "radio";
+                    trueChoice.name = "bool";
+                    trueChoice.value = "true";
+
+ let falseChoice = document.createElement("input");
+ falseChoice.type = "radio";
+ falseChoice.name = "bool";
+ falseChoice.value = "false";
+
+ trueChoice.onchange = function () { input.value = "true"; };
+ falseChoice.onchange = function () { input.value = "false"; };
+
+ inputContainer.appendChild(trueChoice);
+ inputContainer.appendChild(document.createTextNode(" True "));
+ inputContainer.appendChild(falseChoice);
+ inputContainer.appendChild(document.createTextNode(" False"));
+ inputContainer.appendChild(input);
+ break;
                     break;
 
                 case "INTEGER":
