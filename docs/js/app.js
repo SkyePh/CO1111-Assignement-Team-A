@@ -80,21 +80,50 @@ function loadQuestion() {
                     break;
 
                 case "INTEGER":
+                   input = document.createElement("input");
                     input.type = "number";
                     input.step = "1";
+                    inputContainer = input;
                     break;
 
                 case "NUMERIC":
-                    // code for NUMERIC
+                   input = document.createElement("input");
+                    input.type = "number";
+                    input.step = "any";
+                    inputContainer = input;
                     break;
 
                 case "MCQ":
-                    // code for MCQ
+                    input = document.createElement("input");
+ input.type = "hidden";
+
+ inputContainer = document.createElement("div");
+
+ ["A", "B", "C", "D"].forEach(function (letter, i) {
+
+     let radio = document.createElement("input");
+     radio.type = "radio";
+     radio.name = "mcq";
+     radio.value = letter;
+     radio.onchange = function () { input.value = letter; };
+     inputContainer.appendChild(radio);
+     inputContainer.appendChild(document.createTextNode(" " + letter + " "));
+ });
+ inputContainer.appendChild(input);
                     break;
 
                 case "TEXT":
-                    // code for text
+                    input = document.createElement("input");
+                    input.type = "text";
+                    inputContainer = input;
                     break;
+
+
+                      default:
+                        inpt = document.createElement("input");
+                        input.type = "text";
+                        inputContainer = input;
+                        break;
             }
             input.required = true;
 
@@ -110,7 +139,7 @@ function loadQuestion() {
 
             answerBox.appendChild(label);
             answerBox.appendChild(document.createElement("br"));
-            answerBox.appendChild(input);
+            answerBox.appendChild(inputContainer);
             answerBox.appendChild(document.createElement("br"));
             answerBox.appendChild(button);
 
