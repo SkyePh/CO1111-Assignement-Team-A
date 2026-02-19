@@ -61,24 +61,75 @@ function loadQuestion() {
             switch (questionType) {
 
                 case "BOOLEAN":
-                    // code for bool
+                    input = document.createElement("input");
+                    input.type = "hidden";
+
+                    inputContainer = document.createElement("div");
+
+                    let trueChoice = document.createElement("input");
+                    trueChoice.type = "radio";
+                    trueChoice.name = "bool";
+                    trueChoice.value = "true";
+
+                    let falseChoice = document.createElement("input");
+                    falseChoice.type = "radio";
+                    falseChoice.name = "bool";
+                    falseChoice.value = "false";
+
+                    trueChoice.onchange = function () { input.value = "true"; };
+                    falseChoice.onchange = function () { input.value = "false"; };
+
+                    inputContainer.appendChild(trueChoice);
+                    inputContainer.appendChild(document.createTextNode(" True "));
+                    inputContainer.appendChild(falseChoice);
+                    inputContainer.appendChild(document.createTextNode(" False"));
+                    inputContainer.appendChild(input);
                     break;
 
                 case "INTEGER":
+                    input = document.createElement("input");
                     input.type = "number";
                     input.step = "1";
+                    inputContainer = input;
                     break;
 
                 case "NUMERIC":
-                    // code for NUMERIC
+                    input = document.createElement("input");
+                    input.type = "number";
+                    input.step = "any";
+                    inputContainer = input;
                     break;
 
                 case "MCQ":
-                    // code for MCQ
+                    input = document.createElement("input");
+                    input.type = "hidden";
+
+                    inputContainer = document.createElement("div");
+
+                    ["A", "B", "C", "D"].forEach(function (letter, i) {
+
+                        let radio = document.createElement("input");
+                        radio.type = "radio";
+                        radio.name = "mcq";
+                        radio.value = letter;
+                        radio.onchange = function () { input.value = letter; };
+                        inputContainer.appendChild(radio);
+                        inputContainer.appendChild(document.createTextNode(" " + letter + " "));
+                    });
+                    inputContainer.appendChild(input);
                     break;
 
                 case "TEXT":
-                    // code for text
+                    input = document.createElement("input");
+                    input.type = "text";
+                    inputContainer = input;
+                    break;
+
+
+                default:
+                    inpt = document.createElement("input");
+                    input.type = "text";
+                    inputContainer = input;
                     break;
             }
             input.required = true;
@@ -102,10 +153,9 @@ function loadQuestion() {
             });
 
 
-
             answerBox.appendChild(label);
             answerBox.appendChild(document.createElement("br"));
-            answerBox.appendChild(input);
+            answerBox.appendChild(inputContainer);
             answerBox.appendChild(document.createElement("br"));
             answerBox.appendChild(submitBtn);
             answerBox.appendChild(document.createElement("br"));
@@ -130,6 +180,7 @@ function showTemporaryError(message) {
     }, 2000);
 }
 
+
 function skipQuestion(){
     fetch(
         "https://codecyprus.org/th/api/skip?session=" + currentSession
@@ -137,15 +188,14 @@ function skipQuestion(){
         .then(r => r.json())
         .then(b => {
             console.log("Skip:", b);
-        if (b.status === "OK") {
-            getScore();
-            loadQuestion()
-        }
-        else
-            showTemporaryError("Cannot skip this question.");
+            if (b.status === "OK") {
+                getScore();
+                loadQuestion()
+            }
+            else
+                showTemporaryError("Cannot skip this question.");
         });
 }
-
 
 function getScore() {
     if (!currentSession) return;
@@ -158,7 +208,7 @@ function getScore() {
         });
 }
 
-    function sendLocation(){
+function sendLocation(){
 
     if (!currentSession) {
         return;
@@ -235,6 +285,5 @@ form.addEventListener("submit", function (event) {
             getScore();
             loadQuestion();
             startLocationTracking();
-
         });
 });
