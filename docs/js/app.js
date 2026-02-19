@@ -86,80 +86,80 @@ function loadQuestion() {
                     inputContainer.appendChild(input);
                     break;
 
-                case "INTEGER":
-                    input = document.createElement("input");
-                    input.type = "number";
-                    input.step = "1";
-                    inputContainer = input;
-                    break;
+                    case "INTEGER":
+                       input = document.createElement("input");
+                        input.type = "number";
+                        input.step = "1";
+                        inputContainer = input;
+                        break;
 
-                case "NUMERIC":
-                    input = document.createElement("input");
-                    input.type = "number";
-                    input.step = "any";
-                    inputContainer = input;
-                    break;
+                    case "NUMERIC":
+                       input = document.createElement("input");
+                        input.type = "number";
+                        input.step = "any";
+                        inputContainer = input;
+                        break;
 
-                case "MCQ":
-                    input = document.createElement("input");
-                    input.type = "hidden";
+                    case "MCQ":
+                        input = document.createElement("input");
+                        input.type = "hidden";
 
-                    inputContainer = document.createElement("div");
+                        inputContainer = document.createElement("div");
 
-                    ["A", "B", "C", "D"].forEach(function (letter, i) {
+                        ["A", "B", "C", "D"].forEach(function (letter, i) {
 
-                        let radio = document.createElement("input");
-                        radio.type = "radio";
-                        radio.name = "mcq";
-                        radio.value = letter;
-                        radio.onchange = function () { input.value = letter; };
-                        inputContainer.appendChild(radio);
-                        inputContainer.appendChild(document.createTextNode(" " + letter + " "));
-                    });
-                    inputContainer.appendChild(input);
-                    break;
+                           let radio = document.createElement("input");
+                           radio.type = "radio";
+                           radio.name = "mcq";
+                           radio.value = letter;
+                           radio.onchange = function () { input.value = letter; };
+                           inputContainer.appendChild(radio);
+                           inputContainer.appendChild(document.createTextNode(" " + letter + " "));
+                        });
+                        inputContainer.appendChild(input);
+                        break;
 
-                case "TEXT":
-                    input = document.createElement("input");
-                    input.type = "text";
-                    inputContainer = input;
-                    break;
-
-
-                default:
-                    inpt = document.createElement("input");
-                    input.type = "text";
-                    inputContainer = input;
-                    break;
-            }
-            input.required = true;
+                        case "TEXT":
+                            input = document.createElement("input");
+                            input.type = "text";
+                            inputContainer = input;
+                            break;
 
 
-
-            const submitBtn = document.createElement("button");
-            submitBtn.textContent = "Submit";
-            submitBtn.type = "button";
-
-            submitBtn.addEventListener("click", function () {
-                submitAnswer(input.value);
-            });
-
-            const skipBtn = document.createElement("button");
-            skipBtn.textContent = "Skip";
-            skipBtn.type = "button";
-
-            skipBtn.addEventListener("click", function () {
-                skipQuestion();
-            });
+                              default:
+                                inpt = document.createElement("input");
+                                input.type = "text";
+                                inputContainer = input;
+                                break;
+                  }
+                  input.required = true;
 
 
-            answerBox.appendChild(label);
-            answerBox.appendChild(document.createElement("br"));
-            answerBox.appendChild(inputContainer);
-            answerBox.appendChild(document.createElement("br"));
-            answerBox.appendChild(submitBtn);
-            answerBox.appendChild(document.createElement("br"));
-            answerBox.appendChild(skipBtn);
+
+                  const submitBtn = document.createElement("button");
+                  submitBtn.textContent = "Submit";
+                  submitBtn.type = "button";
+
+                  submitBtn.addEventListener("click", function () {
+                      submitAnswer(input.value);
+                  });
+
+                  const skipBtn = document.createElement("button");
+                  skipBtn.textContent = "Skip";
+                  skipBtn.type = "button";
+
+                  skipBtn.addEventListener("click", function () {
+                      skipQuestion();
+                  });
+
+
+                  answerBox.appendChild(label);
+                  answerBox.appendChild(document.createElement("br"));
+                  answerBox.appendChild(inputContainer);
+                  answerBox.appendChild(document.createElement("br"));
+                  answerBox.appendChild(submitBtn);
+                  answerBox.appendChild(document.createElement("br"));
+                  answerBox.appendChild(skipBtn);
 
 
         });
