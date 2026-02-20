@@ -16,7 +16,7 @@ function listChallenges(){
                     name: treasureHunts[i].name
                 });
 
-                li.innerHTML = `<a href="./app.html?${params.toString()}">${treasureHunts[i].name}</a>`;
+                li.innerHTML = `<a href="./app.html?${params.toString()}">${treasureHunts[i].name} <br> ${treasureHunt[i].description} </a>`;
                 ul.appendChild(li);
             }
         });
