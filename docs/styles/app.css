@@ -79,3 +79,36 @@ body {
     opacity: 0.8;
 }
 
+#qrSection {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+#qrToggleBtn {
+    padding: 0.6rem 1.2rem;
+    border-radius: 0.5rem;
+    border: none;
+    background-color: #fca311;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+#qrToggleBtn:hover {
+    opacity: 0.9;
+}
+
+#qrPreviewWrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+#qrPreview {
+    display: block;
+    max-width: 100%;
+    border-radius: 0.5rem;
+    background: #111827;
+}
+

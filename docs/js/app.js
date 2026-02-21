@@ -16,6 +16,58 @@ const scoreValue = document.getElementById("scoreValue");
 
 title.textContent = currentHuntName;
 
+//qr scanner settings
+let qrOpts = {
+    continuous: true,
+    video: document.getElementById('qrPreview'),
+    mirror: true,
+    captureImage: false,
+    backgroundScan: true,
+    refractoryPeriod: 5000,
+    scanPeriod: 1
+};
+
+//qr scanner
+var scanner = new Instascan.Scanner(qrOpts);
+let qrScannerActive = false;
+const qrToggleBtn = document.getElementById('qrToggleBtn');
+const qrPreviewWrapper = document.getElementById('qrPreviewWrapper');
+const qrSection = document.getElementById('qrSection');
+
+qrPreviewWrapper.style.display = 'none';
+if (qrSection) qrSection.style.display = 'none';
+
+scanner.addListener('scan', function (content) {
+    console.log(content);
+    let contentEl = document.getElementById("qrContent");
+    if (contentEl) contentEl.innerHTML = content;
+});
+
+function toggleQrScanner() {
+    if (qrScannerActive) {
+        scanner.stop();
+        qrPreviewWrapper.style.display = 'none';
+        qrScannerActive = false;
+        qrToggleBtn.textContent = 'Scan QR Code';
+    } else {
+        Instascan.Camera.getCameras().then(function (cameras) {
+            if (cameras.length > 0) {
+                scanner.start(cameras[0]);
+                qrPreviewWrapper.style.display = 'flex';
+                qrScannerActive = true;
+                qrToggleBtn.textContent = 'Close QR scanner';
+            } else {
+                console.error('No cameras found.');
+                alert('No cameras found.');
+            }
+        }).catch(function (e) {
+            console.error(e);
+        });
+    }
+}
+
+if (qrToggleBtn) qrToggleBtn.addEventListener('click', toggleQrScanner);
+
 function submitAnswer(answer) {
     fetch(
         "https://codecyprus.org/th/api/answer" +
@@ -48,7 +100,9 @@ function loadQuestion() {
             if (q.completed === true)
             {
                 questionBox.innerHTML = "Session completed";
-                stopLocationTracking()
+                stopLocationTracking();
+                if (qrSection) qrSection.style.display = "none";
+                if (qrScannerActive) toggleQrScanner();
                 return;
             }
 
@@ -282,6 +336,7 @@ form.addEventListener("submit", function (event) {
             }
 
             form.style.display = "none";
+            if (qrSection) qrSection.style.display = "block";
             getScore();
             loadQuestion();
             startLocationTracking();
