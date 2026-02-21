@@ -83,14 +83,14 @@ function submitAnswer(answer) {
                 getScore();
                 loadQuestion();
             }
-        });
+        })
+        .catch(err => { console.error("API error (answer):", err); showTemporaryError("Network error. Try again."); });
 }
 
 function loadQuestion() {
     fetch(
         "https://codecyprus.org/th/api/question?session=" + currentSession
     )
-
         .then(r => r.json())
         .then(q => {
             console.log("QUESTION:", q);
@@ -216,7 +216,8 @@ function loadQuestion() {
                   answerBox.appendChild(skipBtn);
 
 
-        });
+        })
+        .catch(err => { console.error("API error (question):", err); if (questionBox) questionBox.innerHTML = "Could not load question. Check connection."; });
 }
 
 function startError(errorText){
@@ -248,7 +249,8 @@ function skipQuestion(){
             }
             else
                 showTemporaryError("Cannot skip this question.");
-        });
+        })
+        .catch(err => { console.error("API error (skip):", err); showTemporaryError("Network error. Try again."); });
 }
 
 function getScore() {
@@ -259,7 +261,8 @@ function getScore() {
             if (data.status === "OK" && data.score !== undefined) {
                 scoreValue.textContent = data.score;
             }
-        });
+        })
+        .catch(err => console.error("API error (score):", err));
 }
 
 function sendLocation(){
@@ -286,9 +289,8 @@ function sendLocation(){
                 "&longitude=" + longitude
             )
                 .then(r => r.json())
-                .then(data => {
-                    console.log("LOCATION RESPONSE:", data);
-                });
+                .then(data => { console.log("LOCATION RESPONSE:", data); })
+                .catch(err => console.error("API error (location):", err));
 
         },
         function (error) {
@@ -324,7 +326,6 @@ form.addEventListener("submit", function (event) {
         "&app=" + APP_NAME +
         "&treasure-hunt-id=" + currentHuntId
     )
-
         .then(r2 => r2.json())
         .then(data => {
             currentSession = data.session;
@@ -340,5 +341,6 @@ form.addEventListener("submit", function (event) {
             getScore();
             loadQuestion();
             startLocationTracking();
-        });
+        })
+        .catch(err => { console.error("API error (start):", err); startError("Cannot reach server. Use a web server (e.g. Live Server) and not file://."); });
 });

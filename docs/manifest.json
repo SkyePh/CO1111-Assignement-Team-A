@@ -1,0 +1,23 @@
+{
+  "name": "Team A's THC",
+  "short_name": "THC-A",
+  "lang": "en-US",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "gold",
+  "theme_color": "gold",
+  "icons": [
+    {
+      "src": "logo_pwa/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "logo_pwa/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

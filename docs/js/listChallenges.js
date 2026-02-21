@@ -16,10 +16,11 @@ function listChallenges(){
                     name: treasureHunts[i].name
                 });
 
-                li.innerHTML = `<a href="./app.html?${params.toString()}">${treasureHunts[i].name} <br> ${treasureHunt[i].description} </a>`;
+                li.innerHTML = `<a href="./app.html?${params.toString()}">${treasureHunts[i].name} <br> ${treasureHunts[i].description} </a>`;
                 ul.appendChild(li);
             }
-        });
+        })
+        .catch(err => { console.error("API error (list):", err); const ul = document.getElementById("challenge-list"); if (ul) ul.innerHTML = "<li>Could not load challenges.</li>"; });
 }
 
 listChallenges();
