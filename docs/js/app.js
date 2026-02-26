@@ -100,9 +100,25 @@ function loadQuestion() {
             if (q.completed === true)
             {
                 questionBox.innerHTML = "Session completed";
+                answerBox.innerHTML = "";
                 stopLocationTracking();
                 if (qrSection) qrSection.style.display = "none";
                 if (qrScannerActive) toggleQrScanner();
+
+
+                const lbBtn = document.createElement("button");
+                lbBtn.textContent = "Check Leaderboard";
+                lbBtn.type = "button";
+
+                lbBtn.addEventListener("click", () =>
+                { window.location.href =
+                    "leaderboard.html?session=" +
+                    encodeURIComponent(currentSession) +
+                    "&player=" +
+                    encodeURIComponent(nameInput.value); });
+
+                answerBox.appendChild(lbBtn);
+
                 return;
             }
 
