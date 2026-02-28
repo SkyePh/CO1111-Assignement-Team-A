@@ -1,13 +1,7 @@
-#startForm {
-    text-align: center;
-}
 
-#questionBox{
-    text-align: center;
-}
-#answerBox {
-    text-align: center;
-}
+
+
+
 
 * {
     box-sizing: border-box;
@@ -24,19 +18,26 @@ body {
 
 #title {
     text-align: center;
-    color: #fca311;
-    margin-bottom: 1rem;
-    font-size: 1.6rem;
+    color: #ffb300;
+    margin-bottom: 5px;
+    font-size: 28px;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(255, 170, 0, 0.6);
 }
 
 #scoreBox {
+    background: #1c2541;
+    padding: 8px;
+    border-radius: 10px;
+    margin: 10px auto 20px;
+    width: fit-content;
     text-align: center;
     font-weight: 600;
-    margin-bottom: 2rem;
-    color: #a5b4c7;
+    color: #ffb300;
 }
 
 #startForm {
+    text-align: center;
     background-color: #1c2541;
     padding: 1.5rem;
     border-radius: 0.75rem;
@@ -51,7 +52,7 @@ body {
 }
 
 #startForm input {
-    width: 100%;
+    width: 20%;
     padding: 0.8rem;
     border-radius: 0.5rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -62,7 +63,7 @@ body {
 }
 
 #startForm button  {
-    width: 100%;
+    width: 20%;
     padding: 0.8rem;
     border-radius: 0.5rem;
     border: none;
@@ -77,6 +78,32 @@ body {
 
 #startForm button:hover {
     opacity: 0.8;
+}
+
+
+
+
+
+#questionBox{
+    background: #1c2541;
+    padding: 1.5rem;
+    margin: 1rem;
+    border-radius: 10px;
+    text-align: center;
+    color: #ffb300;
+
+}
+
+#answerBox{
+    text-align: center;
+}
+
+#answerBox input{
+    width: 20%;
+    padding: 0.8rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: #111827;
 }
 
 #qrSection {
@@ -107,8 +134,9 @@ body {
 
 #qrPreview {
     display: block;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     max-width: 100%;
-    border-radius: 0.5rem;
+    border-radius: 1.5rem;
     background: #111827;
 }
 
