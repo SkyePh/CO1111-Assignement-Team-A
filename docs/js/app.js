@@ -13,7 +13,6 @@ const APP_NAME = "co1111-team-a";
 const form = document.getElementById("startForm");
 const nameInput = document.getElementById("playerName");
 const scoreValue = document.getElementById("scoreValue");
-
 title.textContent = currentHuntName;
 
 //qr scanner settings
@@ -85,12 +84,18 @@ function submitAnswer(answer) {
             if (a.status === "OK") {
                 getScore();
                 loadQuestion();
+                form.style.display = "none";
+
+                questionBox.style.display = "block";
+                answerBox.style.display = "block";
             }
         })
         .catch(err => { console.error("API error (answer):", err); showTemporaryError("Network error. Try again."); });
 }
 
 function loadQuestion() {
+    if (!currentSession) return;
+    answerBox.innerHTML = '';
     fetch(
         "https://codecyprus.org/th/api/question?session=" + currentSession
     )
@@ -252,7 +257,7 @@ function loadQuestion() {
             const submitBtn = document.createElement("button");
             submitBtn.textContent = "Submit";
             submitBtn.type = "button";
-            submitBtn.className = "primary-button";
+            submitBtn.className = "base-button primary-button";
 
             submitBtn.addEventListener("click", function () {
                 if (input.value) {
@@ -271,7 +276,7 @@ function loadQuestion() {
             const skipBtn = document.createElement("button");
             skipBtn.textContent = "Skip";
             skipBtn.type = "button";
-            skipBtn.className = "secondary-button";
+            skipBtn.className = "base-button secondary-button";
 
             skipBtn.addEventListener("click", function () {
                 skipQuestion();
@@ -279,6 +284,8 @@ function loadQuestion() {
 
             buttonGroup.appendChild(submitBtn);
             buttonGroup.appendChild(skipBtn);
+
+            answerBox.innerHTML = "";
 
             answerBox.appendChild(label);
             answerBox.appendChild(inputContainer);
