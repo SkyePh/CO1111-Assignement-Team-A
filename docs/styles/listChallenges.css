@@ -29,11 +29,9 @@ h1{
 
 #challenge-list li {
     background-color: #1c2541;
-    padding: 1.25rem;
     border-radius: 0.75rem;
     box-shadow: 0.2rem 0.1rem 0.1rem rgba(0, 0, 0, 0.75);
     border: 1px solid rgba(255, 255, 255, 0.05);
-
     transition: transform 0.2s ease, box-shadow 0.2s;
 }
 
@@ -42,14 +40,34 @@ h1{
     box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
 }
 
-#challenge-list a{
+#challenge-list .challenge-card-link {
+    display: block;
+    padding: 1.25rem;
     text-decoration: none;
     color: #e5e7eb;
-    font-weight: 600;
-    font-size: 1rem;
+    min-height: 100%;
 }
 
-#challenge-list a:hover{
+#challenge-list .challenge-card-link:hover {
+    color: #e5e7eb;
+}
+
+#challenge-list .challenge-title {
+    display: block;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 0.4rem;
+}
+
+#challenge-list .challenge-card-link:hover .challenge-title {
     color: #fca311;
+}
+
+#challenge-list .challenge-description {
+    display: block;
+    font-weight: 400;
+    font-size: 0.9rem;
+    color: #9ca3af;
+    line-height: 1.4;
 }
 

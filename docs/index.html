@@ -5,8 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THC | Landing Page</title>
     <link rel="stylesheet" href="styles/index.css">
+
+    <!-- pwa stuff -->
+    <link rel="manifest" href="manifest.json" crossorigin="use-credentials">
+    <meta name="theme-color" content="gold"/>
+    <link rel="icon" href="logo_pwa/logo.png" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="logo_pwa/logo.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="teal">
+    <meta name="apple-mobile-web-app-title" content="Team A's THC">
+    <meta name="msapplication-TileImage" content="logo.png">
+    <meta name="msapplication-TileColor" content="#008080">
 </head>
 <body>
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js", { scope: "./" }).catch(function () {});
+  }
+</script>
 
 <div class="container">
     <h1>Team A's Treasure Hunt Challenge</h1>
