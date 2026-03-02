@@ -40,7 +40,10 @@ if (qrSection) qrSection.style.display = 'none';
 scanner.addListener('scan', function (content) {
     console.log(content);
     let contentEl = document.getElementById("qrContent");
-    if (contentEl) contentEl.innerHTML = content;
+    if (contentEl) {
+        contentEl.innerHTML = content;
+        contentEl.classList.remove('qr-placeholder');
+    }
 });
 
 function toggleQrScanner() {
@@ -105,10 +108,10 @@ function loadQuestion() {
                 if (qrSection) qrSection.style.display = "none";
                 if (qrScannerActive) toggleQrScanner();
 
-
                 const lbBtn = document.createElement("button");
                 lbBtn.textContent = "Check Leaderboard";
                 lbBtn.type = "button";
+                lbBtn.className = "leaderboard-button";
 
                 lbBtn.addEventListener("click", () =>
                 { window.location.href =
@@ -128,117 +131,167 @@ function loadQuestion() {
             label.textContent = "Your answer:";
 
             let input = document.createElement("input");
-            switch (questionType) {
+            let inputContainer;
 
+            switch (questionType) {
                 case "BOOLEAN":
                     input = document.createElement("input");
                     input.type = "hidden";
+                    input.className = "hidden-input";
 
                     inputContainer = document.createElement("div");
+                    inputContainer.className = "radio-group";
+
+                    //true option
+                    let trueDiv = document.createElement("div");
+                    trueDiv.className = "radio-button";
 
                     let trueChoice = document.createElement("input");
                     trueChoice.type = "radio";
                     trueChoice.name = "bool";
                     trueChoice.value = "true";
+                    trueChoice.id = "bool-true";
+
+                    let trueLabel = document.createElement("label");
+                    trueLabel.htmlFor = "bool-true";
+                    trueLabel.textContent = "True";
+
+                    trueChoice.onchange = function () { input.value = "true"; };
+
+                    trueDiv.appendChild(trueChoice);
+                    trueDiv.appendChild(trueLabel);
+
+                    //false option
+                    let falseDiv = document.createElement("div");
+                    falseDiv.className = "radio-button";
 
                     let falseChoice = document.createElement("input");
                     falseChoice.type = "radio";
                     falseChoice.name = "bool";
                     falseChoice.value = "false";
+                    falseChoice.id = "bool-false";
 
-                    trueChoice.onchange = function () { input.value = "true"; };
+                    let falseLabel = document.createElement("label");
+                    falseLabel.htmlFor = "bool-false";
+                    falseLabel.textContent = "False";
+
                     falseChoice.onchange = function () { input.value = "false"; };
 
-                    inputContainer.appendChild(trueChoice);
-                    inputContainer.appendChild(document.createTextNode(" True "));
-                    inputContainer.appendChild(falseChoice);
-                    inputContainer.appendChild(document.createTextNode(" False"));
+                    falseDiv.appendChild(falseChoice);
+                    falseDiv.appendChild(falseLabel);
+
+                    inputContainer.appendChild(trueDiv);
+                    inputContainer.appendChild(falseDiv);
                     inputContainer.appendChild(input);
                     break;
 
-                    case "INTEGER":
-                       input = document.createElement("input");
-                        input.type = "number";
-                        input.step = "1";
-                        inputContainer = input;
-                        break;
+                case "INTEGER":
+                    input = document.createElement("input");
+                    input.type = "number";
+                    input.step = "1";
+                    input.className = "styled-input";
+                    input.placeholder = "Enter a whole number...";
+                    inputContainer = input;
+                    break;
 
-                    case "NUMERIC":
-                       input = document.createElement("input");
-                        input.type = "number";
-                        input.step = "any";
-                        inputContainer = input;
-                        break;
+                case "NUMERIC":
+                    input = document.createElement("input");
+                    input.type = "number";
+                    input.step = "any";
+                    input.className = "styled-input";
+                    input.placeholder = "Enter a number...";
+                    inputContainer = input;
+                    break;
 
-                    case "MCQ":
-                        input = document.createElement("input");
-                        input.type = "hidden";
+                case "MCQ":
+                    input = document.createElement("input");
+                    input.type = "hidden";
+                    input.className = "hidden-input";
 
-                        inputContainer = document.createElement("div");
+                    inputContainer = document.createElement("div");
+                    inputContainer.className = "radio-grid-2x2";
 
-                        ["A", "B", "C", "D"].forEach(function (letter, i) {
+                    ["A", "B", "C", "D"].forEach(function (letter, i) {
+                        let radioDiv = document.createElement("div");
+                        radioDiv.className = "radio-button";
 
-                           let radio = document.createElement("input");
-                           radio.type = "radio";
-                           radio.name = "mcq";
-                           radio.value = letter;
-                           radio.onchange = function () { input.value = letter; };
-                           inputContainer.appendChild(radio);
-                           inputContainer.appendChild(document.createTextNode(" " + letter + " "));
-                        });
-                        inputContainer.appendChild(input);
-                        break;
+                        let radio = document.createElement("input");
+                        radio.type = "radio";
+                        radio.name = "mcq";
+                        radio.value = letter;
+                        radio.id = "mcq-" + letter;
 
-                        case "TEXT":
-                            input = document.createElement("input");
-                            input.type = "text";
-                            inputContainer = input;
-                            break;
+                        let radioLabel = document.createElement("label");
+                        radioLabel.htmlFor = "mcq-" + letter;
+                        radioLabel.textContent = "Option " + letter;
 
+                        radio.onchange = function () { input.value = letter; };
 
-                              default:
-                                inpt = document.createElement("input");
-                                input.type = "text";
-                                inputContainer = input;
-                                break;
-                  }
-                  input.required = true;
+                        radioDiv.appendChild(radio);
+                        radioDiv.appendChild(radioLabel);
+                        inputContainer.appendChild(radioDiv);
+                    });
+                    inputContainer.appendChild(input);
+                    break;
 
+                case "TEXT":
+                default:
+                    input = document.createElement("input");
+                    input.type = "text";
+                    input.className = "styled-input";
+                    input.placeholder = "Type your answer...";
+                    inputContainer = input;
+                    break;
+            }
 
+            if (input.required !== undefined) input.required = true;
 
-                  const submitBtn = document.createElement("button");
-                  submitBtn.textContent = "Submit";
-                  submitBtn.type = "button";
+            const buttonGroup = document.createElement("div");
+            buttonGroup.className = "button-group";
 
-                  submitBtn.addEventListener("click", function () {
-                      submitAnswer(input.value);
-                  });
+            const submitBtn = document.createElement("button");
+            submitBtn.textContent = "Submit";
+            submitBtn.type = "button";
+            submitBtn.className = "primary-button";
 
-                  const skipBtn = document.createElement("button");
-                  skipBtn.textContent = "Skip";
-                  skipBtn.type = "button";
+            submitBtn.addEventListener("click", function () {
+                if (input.value) {
+                    submitAnswer(input.value);
+                } else {
+                    //get value from hidden input if it a radiogroup
+                    let hiddenInput = inputContainer.querySelector('input[type="hidden"]');
+                    if (hiddenInput && hiddenInput.value) {
+                        submitAnswer(hiddenInput.value);
+                    } else {
+                        showTemporaryError("Please select an answer");
+                    }
+                }
+            });
 
-                  skipBtn.addEventListener("click", function () {
-                      skipQuestion();
-                  });
+            const skipBtn = document.createElement("button");
+            skipBtn.textContent = "Skip";
+            skipBtn.type = "button";
+            skipBtn.className = "secondary-button";
 
+            skipBtn.addEventListener("click", function () {
+                skipQuestion();
+            });
 
-                  answerBox.appendChild(label);
-                  answerBox.appendChild(document.createElement("br"));
-                  answerBox.appendChild(inputContainer);
-                  answerBox.appendChild(document.createElement("br"));
-                  answerBox.appendChild(submitBtn);
-                  answerBox.appendChild(document.createElement("br"));
-                  answerBox.appendChild(skipBtn);
+            buttonGroup.appendChild(submitBtn);
+            buttonGroup.appendChild(skipBtn);
 
-
+            answerBox.appendChild(label);
+            answerBox.appendChild(inputContainer);
+            answerBox.appendChild(buttonGroup);
         })
-        .catch(err => { console.error("API error (question):", err); if (questionBox) questionBox.innerHTML = "Could not load question. Check connection."; });
+        .catch(err => {
+            console.error("API error (question):", err);
+            if (questionBox) questionBox.innerHTML = "Could not load question. Check connection.";
+        });
 }
 
 function startError(errorText){
     questionBox.innerHTML = errorText;
-
 }
 
 function showTemporaryError(message) {
@@ -251,7 +304,6 @@ function showTemporaryError(message) {
     }, 2000);
 }
 
-
 function skipQuestion(){
     fetch(
         "https://codecyprus.org/th/api/skip?session=" + currentSession
@@ -261,7 +313,7 @@ function skipQuestion(){
             console.log("Skip:", b);
             if (b.status === "OK") {
                 getScore();
-                loadQuestion()
+                loadQuestion();
             }
             else
                 showTemporaryError("Cannot skip this question.");
@@ -282,7 +334,6 @@ function getScore() {
 }
 
 function sendLocation(){
-
     if (!currentSession) {
         return;
     }
@@ -294,7 +345,6 @@ function sendLocation(){
 
     navigator.geolocation.getCurrentPosition(
         function (position) {
-
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
 
@@ -307,20 +357,18 @@ function sendLocation(){
                 .then(r => r.json())
                 .then(data => { console.log("LOCATION RESPONSE:", data); })
                 .catch(err => console.error("API error (location):", err));
-
         },
         function (error) {
             console.log("Location error:", error.message);
         }
     );
-
 }
 
 function startLocationTracking() {
     if (locationIntervalId !== null) return;
 
     sendLocation();
-    locationIntervalId = setInterval(sendLocation, 30000); // каждые 30 сек
+    locationIntervalId = setInterval(sendLocation, 30000);
 }
 
 function stopLocationTracking() {
@@ -331,7 +379,6 @@ function stopLocationTracking() {
 }
 
 form.addEventListener("submit", function (event) {
-
     event.preventDefault(); // stop reload of page
 
     const playerName = nameInput.value;
