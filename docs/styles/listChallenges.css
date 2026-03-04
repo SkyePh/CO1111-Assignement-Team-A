@@ -25,6 +25,7 @@ h1{
     display: grid;
     grid-template-columns: 1fr;
     gap: 1rem;
+    max-width: 800px;
 }
 
 #challenge-list li {
