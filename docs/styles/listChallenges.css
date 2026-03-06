@@ -80,37 +80,4 @@ h2{
     text-align: center;
 }
 
-#Rules {
-    list-style: none;
-    padding: 2rem ;
-    margin: 0 auto;
-    max-width: 700px;
-    background-color: #1c2541;
-    border: 2px solid #1c2541;
-    border-radius: 12px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-    color: #e5e7eb;
-    line-height: 1.5;
-}
 
-#Rules li {
-    border-radius: 0.75rem;
-    padding: 1rem 1.5rem;
-    box-shadow: 0.2rem 0.1rem 0.1rem rgba(0,0,0,0.75);
-    border: 1px solid rgba(255,255,255,0.05);
-    transition: transform 0.2s ease, box-shadow 0.2s;
-    width: 100%;
-    text-align: left;
-}
-
-#Rules li:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 28px rgba(0,0,0,0.45);
-}
-
-.points-rule {
-    font-weight: bold;
-    background-color: #0b132b; /
-    padding: 1rem;
-    border-radius: 0.75rem;
-}
