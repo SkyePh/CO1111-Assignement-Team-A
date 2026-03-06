@@ -80,4 +80,11 @@ h2{
     text-align: center;
 }
 
+#Rules {
+    padding: 2.5rem;
+    margin: 0;
+    text-align: center;
+    list-style-position: inside;
+}
+
 
