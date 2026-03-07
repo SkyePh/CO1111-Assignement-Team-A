@@ -8,6 +8,7 @@ const questionBox = document.getElementById("questionBox");
 let userAnswer = null;
 let title = document.getElementById("title");
 let locationIntervalId = null;
+let requiresLocation = false;
 
 const APP_NAME = "co1111-team-a";
 const form = document.getElementById("startForm");
@@ -262,11 +263,19 @@ function loadQuestion() {
 
             submitBtn.addEventListener("click", function () {
                 if (input.value) {
+                    if (requiresLocation) {
+                        sendLocation();
+                    }
                     submitAnswer(input.value);
                 } else {
                     //get value from hidden input if it a radiogroup
                     let hiddenInput = inputContainer.querySelector('input[type="hidden"]');
                     if (hiddenInput && hiddenInput.value) {
+
+                        if (requiresLocation) {
+                            sendLocation();
+                        }
+
                         submitAnswer(hiddenInput.value);
                     } else {
                         showTemporaryError("Please select an answer");
@@ -342,6 +351,7 @@ function getScore() {
 }
 
 function sendLocation(){
+    console.log("sendLocation called");
     if (!currentSession) {
         return;
     }
@@ -355,6 +365,8 @@ function sendLocation(){
         function (position) {
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
+            console.log("Geolocation success");
+            console.log("Latitude:", latitude, "Longitude:", longitude);
 
             fetch(
                 "https://codecyprus.org/th/api/location" +
@@ -365,6 +377,7 @@ function sendLocation(){
                 .then(r => r.json())
                 .then(data => { console.log("LOCATION RESPONSE:", data); })
                 .catch(err => console.error("API error (location):", err));
+
         },
         function (error) {
             console.log("Location error:", error.message);
@@ -372,19 +385,8 @@ function sendLocation(){
     );
 }
 
-function startLocationTracking() {
-    if (locationIntervalId !== null) return;
 
-    sendLocation();
-    locationIntervalId = setInterval(sendLocation, 30000);
-}
 
-function stopLocationTracking() {
-    if (locationIntervalId !== null) {
-        clearInterval(locationIntervalId);
-        locationIntervalId = null;
-    }
-}
 
 form.addEventListener("submit", function (event) {
     event.preventDefault(); // stop reload of page
@@ -411,7 +413,6 @@ form.addEventListener("submit", function (event) {
             if (qrSection) qrSection.style.display = "block";
             getScore();
             loadQuestion();
-            startLocationTracking();
         })
         .catch(err => { console.error("API error (start):", err); startError("Cannot reach server. Use a web server (e.g. Live Server) and not file://."); });
 });
