@@ -281,22 +281,6 @@ h1 {
     box-shadow: 0 18px 30px -6px rgba(0, 0, 0, 0.6);
 }
 
-.leaderboard-button {
-    background: linear-gradient(145deg, #c9a227, #b38b1f);
-    color: #1e1b18;
-    font-size: 1.3rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    width: 100%;
-    max-width: 300px;
-}
-
-.leaderboard-button:hover {
-    background: linear-gradient(145deg, #b38b1f, #9e7a1b);
-    transform: scale(1.05);
-    box-shadow: 0 20px 30px -6px rgba(0, 0, 0, 0.7);
-}
-
 .hidden-input {
     display: none;
 }

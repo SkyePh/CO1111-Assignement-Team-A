@@ -116,7 +116,8 @@ function loadQuestion() {
                 const lbBtn = document.createElement("button");
                 lbBtn.textContent = "Check Leaderboard";
                 lbBtn.type = "button";
-                lbBtn.className = "leaderboard-button";
+                lbBtn.className = "base-button primary-button";
+                lbBtn.style.marginTop = "20px";
 
                 lbBtn.addEventListener("click", () =>
                 { window.location.href =
