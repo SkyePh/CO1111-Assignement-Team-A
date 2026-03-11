@@ -264,19 +264,36 @@ function loadQuestion() {
             submitBtn.addEventListener("click", function () {
                 if (input.value) {
                     if (requiresLocation) {
-                        sendLocation();
+                        sendLocation(function(success) {
+                            if (success) {
+                                submitAnswer(input.value);
+                            } else {
+                                showTemporaryError("Location could not be verified.");
+                            }
+                        });
+                    } else {
+                        submitAnswer(input.value);
                     }
-                    submitAnswer(input.value);
+
+
                 } else {
                     //get value from hidden input if it a radiogroup
                     let hiddenInput = inputContainer.querySelector('input[type="hidden"]');
                     if (hiddenInput && hiddenInput.value) {
 
                         if (requiresLocation) {
-                            sendLocation();
+                            sendLocation(function(success) {
+                                if (success) {
+                                    submitAnswer(hiddenInput.value);
+                                } else {
+                                    showTemporaryError("Location could not be verified.");
+                                }
+                            });
+                        } else {
+                            submitAnswer(hiddenInput.value);
                         }
 
-                        submitAnswer(hiddenInput.value);
+
                     } else {
                         showTemporaryError("Please select an answer");
                     }
@@ -350,14 +367,17 @@ function getScore() {
         .catch(err => console.error("API error (score):", err));
 }
 
-function sendLocation(){
+function sendLocation(callback){
     console.log("sendLocation called");
+
     if (!currentSession) {
+        callback(false);
         return;
     }
 
     if (!navigator.geolocation) {
         console.log("Geolocation not supported.");
+        callback(false);
         return;
     }
 
@@ -365,6 +385,7 @@ function sendLocation(){
         function (position) {
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
+
             console.log("Geolocation success");
             console.log("Latitude:", latitude, "Longitude:", longitude);
 
@@ -375,12 +396,23 @@ function sendLocation(){
                 "&longitude=" + longitude
             )
                 .then(r => r.json())
-                .then(data => { console.log("LOCATION RESPONSE:", data); })
-                .catch(err => console.error("API error (location):", err));
+                .then(data => {
+                    console.log("LOCATION RESPONSE:", data);
 
+                    if (data.status === "OK") {
+                        callback(true);
+                    } else {
+                        callback(false);
+                    }
+                })
+                .catch(err => {
+                    console.error("API error (location):", err);
+                    callback(false);
+                });
         },
         function (error) {
             console.log("Location error:", error.message);
+            callback(false);
         }
     );
 }
