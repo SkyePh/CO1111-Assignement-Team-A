@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THC | Start Testing</title>
+    <link rel="stylesheet" href="../../styles/index.css">
+    <link rel="stylesheet" href="../../styles/startTesting.css">
+</head>
+
+<body class="start-testing-page">
+
+    <div class="container">
+        <h1>Start Testing</h1>
+
+        <p>Test <span style="color: #e9c46a;">/th/test-api/start</span>. Simulate a successful challenge start, or simulate an error.</p>
+
+        <form id="startForm">
+            <label for="player">Error type:</label>
+            <select id="player" name="player">
+                <option value="">— Success (random data) —</option>
+                <option value="INACTIVE">INACTIVE (treasure hunt not active)</option>
+                <option value="EMPTY">EMPTY (no questions)</option>
+                <option value="PLAYER">PLAYER (name already in use)</option>
+                <option value="APP">APP (missing app param)</option>
+                <option value="UNKNOWN">UNKNOWN (hunt not found)</option>
+                <option value="MISSING_PARAMETER">MISSING_PARAMETER (missing param)</option>
+            </select>
+            <button type="submit">Send request</button>
+        </form>
+
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById("startForm");
+        const resultsEl = document.getElementById("results");
+        const playerEl = document.getElementById("player");
+
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const player = (playerEl.value || "").trim();
+            const url = "https://codecyprus.org/th/test-api/start" +
+                (player ? "?player=" + encodeURIComponent(player) : "");
+
+            resultsEl.innerHTML = "<p class=\"loading\">Loading…</p>";
+
+            fetch(url)
+                .then(function (res) { return res.json(); })
+                .then(function (data) {
+                    var json = JSON.stringify(data, null, 2);
+                    var isError = data.status === "ERROR" || (data.errorMessages && data.errorMessages.length > 0);
+                    resultsEl.innerHTML = "<pre class=\"result-json" + (isError ? " is-error" : "") + "\">" + escapeHtml(json) + "</pre>";
+                })
+                .catch(function (err) {
+                    resultsEl.innerHTML = "<p class=\"result-error\">Request failed: " + escapeHtml(err.message) + "</p>";
+                });
+        });
+
+        function escapeHtml(text) {
+            var div = document.createElement("div");
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+
+</body>
+
+</html>

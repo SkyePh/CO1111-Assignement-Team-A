@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THC | List Testing</title>
+    <link rel="stylesheet" href="../../styles/index.css">
+    <link rel="stylesheet" href="../../styles/listTesting.css">
+</head>
+
+<body class="list-testing-page">
+
+    <div class="container">
+        <h1>List Testing</h1>
+
+        <p>Test <span style="color: #e9c46a;">/th/test-api/list</span> with a custom number of treasure hunts.</p>
+
+        <form id="listForm">
+            <label for="numberOfThs">Number of Treasure Hunts:</label>
+            <input type="number" id="numberOfThs" name="number-of-ths" min="1" value="2" placeholder="e.g. 2">
+            <button type="submit">Send request</button>
+        </form>
+
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById("listForm");
+        const resultsEl = document.getElementById("results");
+        const inputEl = document.getElementById("numberOfThs");
+
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const num = inputEl.value.trim();
+            const url = "https://codecyprus.org/th/test-api/list" +
+                (num ? "?number-of-ths=" + encodeURIComponent(num) : "");
+
+            resultsEl.innerHTML = "<p class=\"loading\">Loading…</p>";
+
+            fetch(url)
+                .then(function (res) { return res.json(); })
+                .then(function (data) {
+                    if (data.treasureHunts && Array.isArray(data.treasureHunts)) {
+                        var html = "<p class=\"results-heading\">Results (" + data.treasureHunts.length + "):</p>";
+                        html += "<ul class=\"result-list\">";
+                        data.treasureHunts.forEach(function (th) {
+                            html += "<li class=\"result-item\">";
+                            html += "<strong class=\"result-name\">" + escapeHtml(th.name || "—") + "</strong>";
+                            if (th.description) html += "<br><span class=\"result-desc\">" + escapeHtml(th.description) + "</span>";
+                            if (th.uuid) html += "<br><code class=\"result-uuid\">" + escapeHtml(th.uuid) + "</code>";
+                            html += "</li>";
+                        });
+                        html += "</ul>";
+                        resultsEl.innerHTML = html;
+                    } else {
+                        resultsEl.innerHTML = "<pre class=\"result-json\">" + escapeHtml(JSON.stringify(data, null, 2)) + "</pre>";
+                    }
+                })
+                .catch(function (err) {
+                    resultsEl.innerHTML = "<p class=\"result-error\">Request failed: " + escapeHtml(err.message) + "</p>";
+                });
+        });
+
+        function escapeHtml(text) {
+            var div = document.createElement("div");
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+
+</body>
+
+</html>
