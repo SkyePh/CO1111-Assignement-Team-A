@@ -88,3 +88,19 @@ h2{
     border:3px dashed #fca311;
     border-radius: 15px;
 }
+
+.locked{
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.locked .challenge-title{
+    color: #d4af37;
+}
+
+.challenge-start{
+    display: block;
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: #aaa
+}
