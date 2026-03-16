@@ -25,7 +25,7 @@ function listChallenges(){
 
                 if (isLocked) {
 
-                    li.innerHTML='<div class="challenge-card locked"> ' +
+                    li.innerHTML='<div class="challenge-card locked" style="margin: 24px;"> ' +
                         '<span class="challenge-title">Future-treasure hunt 🔒</span>' +
                         '<span class="challenge-description">This treasure hunt is not available yet</span>' +
                         '<span class="challenge-start">Start: One thousand years</span></div>';
