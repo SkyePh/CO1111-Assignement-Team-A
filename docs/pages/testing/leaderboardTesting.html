@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THC/ Leaderboard API Testing</title>
+    <link rel="stylesheet" href="leaderboardTesting.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Leaderboard Tester</h1>
+
+    <button id="loadLeaderboardBtn" class="base-button primary-button">
+        Load Leaderboard
+    </button>
+
+    <div class="table-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Name</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+
+            <tbody id="leaderboard-body">
+               <tr>
+                   <td colspan="3">Press the button to load Leaderboard!</td>
+               </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="leaderboardTesting.js"></script>
+</body>
+</html>
