@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THC | Answer Testing</title>
+    <link rel="stylesheet" href="../../styles/index.css">
+    <link rel="stylesheet" href="../../styles/answerTesting.css">
+</head>
+
+<body class="answer-testing-page">
+
+<div class="container">
+    <h1>Start Testing</h1>
+
+    <p>Test <span style="color: #e9c46a;">/th/test-api/answer</span>. by simulating different answer conditions.</p>
+
+    <form id="startForm">
+        <label for="answer">Test parameter</label>
+        <select id="answer" name="answer">
+            <option value="correct">correct </option>
+            <option value="completed">completed</option>
+            <option value="expired">expired</option>
+        </select>
+        <button type="submit">Send request</button>
+    </form>
+
+    <div id="results"></div>
+</div>
+
+<script>
+    const form = document.getElementById("startForm");
+    const resultsEl = document.getElementById("results");
+    const questionEl = document.getElementById("answer");
+
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const answer = (questionEl.value || "").trim();
+        const url = "https://codecyprus.org/th/test-api/answer?" + answer;
+
+        resultsEl.innerHTML = "<p class=\"loading\">Loading…</p>";
+
+        fetch(url)
+            .then(r => r.json())
+            .then(data => {
+                resultsEl.innerHTML = "<pre class=\"result-json\">" + JSON.stringify(data, null, 2) + "</pre>";
+            })
+            .catch(err => {
+                resultsEl.innerHTML = "Error: " + err.message;
+            });
+    });
+
+
+
+</script>
+</body>
+</html>

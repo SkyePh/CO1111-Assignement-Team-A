@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THC | Score API Testing</title>
+    <link rel="stylesheet" href="../../styles/index.css">
+    <link rel="stylesheet" href="../../styles/scoreTesting.css">
+</head>
+<body class="score-testing-page">
+<div class="container">
+    <h1>Score API Tester</h1>
+
+    <div class="controls">
+        <label for="scoreInput">Enter Score</label>
+        <input type="number" id="scoreInput" min="0" max="1000" placeholder="e.g. 100">
+        <button id="testScoreBtn" type="button">Test Score API</button>
+    </div>
+
+    <div class="result-card">
+        <div id="scoreResult">-</div>
+    </div>
+</div>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded' , function (){
+
+    });
+    const button = document.getElementById("testScoreBtn");
+    const result = document.getElementById("scoreResult");
+
+    button.addEventListener("click", function() {
+
+        const score = document.getElementById("scoreInput").value;
+
+        if(!score) {
+            result.textContent = "-";
+            return;
+        }
+        const num = parseInt(score, 10);
+        if (num < 0 || num > 1000) {
+            result.textContent = "-";
+            return;
+        }
+
+        fetch("https://codecyprus.org/th/test-api/score?score=" + score)
+        .then(res => res.json())
+            .then(data => {
+
+            if(data.status === "OK") {
+                result.textContent = data.score;
+            }else{
+                result.textContent = "Error";
+            }
+
+            })
+        .catch(error => {
+            console.error(error);
+            result.textContent = "API Error";
+        });
+    });
+
+</script>
+
+</body>
+</html>

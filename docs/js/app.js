@@ -8,12 +8,12 @@ const questionBox = document.getElementById("questionBox");
 let userAnswer = null;
 let title = document.getElementById("title");
 let locationIntervalId = null;
+let requiresLocation = false;
 
 const APP_NAME = "co1111-team-a";
 const form = document.getElementById("startForm");
 const nameInput = document.getElementById("playerName");
 const scoreValue = document.getElementById("scoreValue");
-
 title.textContent = currentHuntName;
 
 //qr scanner settings
@@ -85,12 +85,18 @@ function submitAnswer(answer) {
             if (a.status === "OK") {
                 getScore();
                 loadQuestion();
+                form.style.display = "none";
+
+                questionBox.style.display = "block";
+                answerBox.style.display = "block";
             }
         })
         .catch(err => { console.error("API error (answer):", err); showTemporaryError("Network error. Try again."); });
 }
 
 function loadQuestion() {
+    if (!currentSession) return;
+    answerBox.innerHTML = '';
     fetch(
         "https://codecyprus.org/th/api/question?session=" + currentSession
     )
@@ -111,7 +117,8 @@ function loadQuestion() {
                 const lbBtn = document.createElement("button");
                 lbBtn.textContent = "Check Leaderboard";
                 lbBtn.type = "button";
-                lbBtn.className = "leaderboard-button";
+                lbBtn.className = "base-button primary-button";
+                lbBtn.style.marginTop = "20px";
 
                 lbBtn.addEventListener("click", () =>
                 { window.location.href =
@@ -252,16 +259,41 @@ function loadQuestion() {
             const submitBtn = document.createElement("button");
             submitBtn.textContent = "Submit";
             submitBtn.type = "button";
-            submitBtn.className = "primary-button";
+            submitBtn.className = "base-button primary-button";
 
             submitBtn.addEventListener("click", function () {
                 if (input.value) {
-                    submitAnswer(input.value);
+                    if (requiresLocation) {
+                        sendLocation(function(success) {
+                            if (success) {
+                                submitAnswer(input.value);
+                            } else {
+                                showTemporaryError("Location could not be verified.");
+                            }
+                        });
+                    } else {
+                        submitAnswer(input.value);
+                    }
+
+
                 } else {
                     //get value from hidden input if it a radiogroup
                     let hiddenInput = inputContainer.querySelector('input[type="hidden"]');
                     if (hiddenInput && hiddenInput.value) {
-                        submitAnswer(hiddenInput.value);
+
+                        if (requiresLocation) {
+                            sendLocation(function(success) {
+                                if (success) {
+                                    submitAnswer(hiddenInput.value);
+                                } else {
+                                    showTemporaryError("Location could not be verified.");
+                                }
+                            });
+                        } else {
+                            submitAnswer(hiddenInput.value);
+                        }
+
+
                     } else {
                         showTemporaryError("Please select an answer");
                     }
@@ -271,7 +303,7 @@ function loadQuestion() {
             const skipBtn = document.createElement("button");
             skipBtn.textContent = "Skip";
             skipBtn.type = "button";
-            skipBtn.className = "secondary-button";
+            skipBtn.className = "base-button secondary-button";
 
             skipBtn.addEventListener("click", function () {
                 skipQuestion();
@@ -279,6 +311,8 @@ function loadQuestion() {
 
             buttonGroup.appendChild(submitBtn);
             buttonGroup.appendChild(skipBtn);
+
+            answerBox.innerHTML = "";
 
             answerBox.appendChild(label);
             answerBox.appendChild(inputContainer);
@@ -333,13 +367,17 @@ function getScore() {
         .catch(err => console.error("API error (score):", err));
 }
 
-function sendLocation(){
+function sendLocation(callback){
+    console.log("sendLocation called");
+
     if (!currentSession) {
+        callback(false);
         return;
     }
 
     if (!navigator.geolocation) {
         console.log("Geolocation not supported.");
+        callback(false);
         return;
     }
 
@@ -348,6 +386,9 @@ function sendLocation(){
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
 
+            console.log("Geolocation success");
+            console.log("Latitude:", latitude, "Longitude:", longitude);
+
             fetch(
                 "https://codecyprus.org/th/api/location" +
                 "?session=" + currentSession +
@@ -355,28 +396,29 @@ function sendLocation(){
                 "&longitude=" + longitude
             )
                 .then(r => r.json())
-                .then(data => { console.log("LOCATION RESPONSE:", data); })
-                .catch(err => console.error("API error (location):", err));
+                .then(data => {
+                    console.log("LOCATION RESPONSE:", data);
+
+                    if (data.status === "OK") {
+                        callback(true);
+                    } else {
+                        callback(false);
+                    }
+                })
+                .catch(err => {
+                    console.error("API error (location):", err);
+                    callback(false);
+                });
         },
         function (error) {
             console.log("Location error:", error.message);
+            callback(false);
         }
     );
 }
 
-function startLocationTracking() {
-    if (locationIntervalId !== null) return;
 
-    sendLocation();
-    locationIntervalId = setInterval(sendLocation, 30000);
-}
 
-function stopLocationTracking() {
-    if (locationIntervalId !== null) {
-        clearInterval(locationIntervalId);
-        locationIntervalId = null;
-    }
-}
 
 form.addEventListener("submit", function (event) {
     event.preventDefault(); // stop reload of page
@@ -403,7 +445,6 @@ form.addEventListener("submit", function (event) {
             if (qrSection) qrSection.style.display = "block";
             getScore();
             loadQuestion();
-            startLocationTracking();
         })
         .catch(err => { console.error("API error (start):", err); startError("Cannot reach server. Use a web server (e.g. Live Server) and not file://."); });
 });
