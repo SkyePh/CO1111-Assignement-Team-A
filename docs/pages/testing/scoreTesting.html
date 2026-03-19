@@ -3,31 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THC/ Score Tester</title>
-    <link rel="stylesheet" href="../../../styles.css/scoreTesting.css">
-
+    <title>THC | Score API Testing</title>
+    <link rel="stylesheet" href="../../styles/index.css">
+    <link rel="stylesheet" href="../../styles/scoreTesting.css">
 </head>
-<body>
-
+<body class="score-testing-page">
 <div class="container">
-    <h1>THC Score API Tester</h1>
+    <h1>Score API Tester</h1>
 
-<div class="score-card">
+    <div class="controls">
+        <label for="scoreInput">Enter Score</label>
+        <input type="number" id="scoreInput" min="0" max="1000" placeholder="e.g. 100">
+        <button id="testScoreBtn" type="button">Test Score API</button>
+    </div>
 
-<label for="scoreInput">Enter Score</label>
-
-<input type="number" id="scoreInput" placeholder="Enter Score">
-
-
-<button id="testScoreBtn" class="base-button primary-button">Test Score API
-</button>
-
-</div>
-
-<div class="result-card">
-    <p class="result-label">Returned Score</p>
-    <div id="ScoreResult">-</div>
-</div>
+    <div class="result-card">
+        <div id="scoreResult">-</div>
+    </div>
 </div>
 
 <script>
@@ -43,7 +35,12 @@
         const score = document.getElementById("scoreInput").value;
 
         if(!score) {
-            result.textContent = "Enter Score";
+            result.textContent = "-";
+            return;
+        }
+        const num = parseInt(score, 10);
+        if (num < 0 || num > 1000) {
+            result.textContent = "-";
             return;
         }
 

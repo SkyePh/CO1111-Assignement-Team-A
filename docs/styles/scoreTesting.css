@@ -1,0 +1,58 @@
+.score-testing-page .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.score-testing-page .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.score-testing-page .controls label {
+    color: #e9c46a;
+}
+
+.score-testing-page .controls #scoreInput {
+    width: 6rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    background-color: #1c2541;
+    color: #f2ebe3;
+    font-size: 1rem;
+}
+
+.score-testing-page .controls #scoreInput:focus {
+    outline: none;
+    border-color: rgba(212, 175, 55, 0.6);
+}
+
+.score-testing-page .controls button {
+    width: auto;
+    margin-top: 0;
+    padding: 0.5rem 1.25rem;
+    font-size: 1rem;
+}
+
+.score-testing-page .controls button:hover {
+    transform: none;
+    box-shadow: 0 10px 20px -8px rgba(0, 0, 0, 0.5);
+}
+
+.score-testing-page .result-card {
+    margin-top: 1.5rem;
+    text-align: center;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(212, 175, 55, 0.15);
+}
+
+.score-testing-page .result-card #scoreResult {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #e9c46a;
+}
