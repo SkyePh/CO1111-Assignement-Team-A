@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THC | Question Testing</title>
+    <link rel="stylesheet" href="../../styles/index.css">
+    <link rel="stylesheet" href="../../styles/questionTesting.css">
+</head>
+
+<body class="question-testing-page">
+
+<div class="container">
+    <h1>Start Testing</h1>
+
+    <p>Test <span style="color: #e9c46a;">/th/test-api/question</span>. by simulating different question conditions and configurations.</p>
+
+    <form id="startForm">
+        <label for="question">Test parameter</label>
+        <select id="question" name="question">
+            <option value="completed">completed </option>
+            <option value="question-type=MCQ">MCQ</option>
+            <option value="question-type=BOOLEAN">BOOLEAN</option>
+            <option value="question-type=INTEGER">INTEGER</option>
+            <option value="question-type=NUMERIC">NUMERIC</option>
+            <option value="question-type=TEXT">TEXT</option>
+            <option value="question-type=RANDOM">RANDOM</option>
+            <option value="can-be-skipped">can-be-skipped</option>
+            <option value="requires-location">requires-location</option>
+        </select>
+        <button type="submit">Send request</button>
+    </form>
+
+    <div id="results"></div>
+
+    <div id="questionBox">Question will be displayed here</div>
+
+</div>
+
+<script>
+    const questionBox = document.getElementById("questionBox");
+    const form = document.getElementById("startForm");
+    const resultsEl = document.getElementById("results");
+    const questionEl = document.getElementById("question");
+
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const question = (questionEl.value || "").trim();
+        const url = "https://codecyprus.org/th/test-api/question?" + question;
+
+        resultsEl.innerHTML = "<p class=\"loading\">Loading…</p>";
+
+        fetch(url)
+            .then(r => r.json())
+            .then(data => {
+                resultsEl.innerHTML = "<pre class=\"result-json\">" + JSON.stringify(data, null, 2) + "</pre>";
+                questionBox.innerHTML = data.questionText;
+            })
+            .catch(err => {
+                resultsEl.innerHTML = "Error: " + err.message;
+            });
+    });
+
+
+
+</script>
+</body>
+</html>

@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", loadLeaderboard);
 
 function loadLeaderboard() {
     const tbody = document.getElementById("leaderboard-body");
-    tbody.innerHTML = "";
+    tbody.innerHTML = "<tr><td colspan='3'>Loading...</td></tr>";
 
     const params = new URLSearchParams(window.location.search);
     const session = params.get("session");
@@ -16,6 +16,7 @@ function loadLeaderboard() {
                 return;
             }
 
+            tbody.innerHTML = "";
             // get top 50
             q.leaderboard.slice(0, 50).forEach((entry, index) => {
                 const row = document.createElement("tr");
@@ -40,6 +41,9 @@ function loadLeaderboard() {
                 row.style.backgroundColor = "#2d3748";
                 tbody.appendChild(row);
             }
+        })
+        .catch(() => {
+            tbody.innerHTML = "<tr><td colspan='3'>Error loading leaderboard</td></tr>";
         });
 }
 
