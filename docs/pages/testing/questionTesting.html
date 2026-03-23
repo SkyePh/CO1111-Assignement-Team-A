@@ -32,9 +32,16 @@
     </form>
 
     <div id="results"></div>
+
+    <div id="questionBox"></div>
+
+    <div id="answerBox"></div>
+
 </div>
 
 <script>
+    const answerBox = document.getElementById("answerBox");
+    const questionBox = document.getElementById("questionBox");
     const form = document.getElementById("startForm");
     const resultsEl = document.getElementById("results");
     const questionEl = document.getElementById("question");
@@ -50,6 +57,9 @@
             .then(r => r.json())
             .then(data => {
                 resultsEl.innerHTML = "<pre class=\"result-json\">" + JSON.stringify(data, null, 2) + "</pre>";
+                questionBox.innerHTML = data.questionText;
+                answerBox.style.display = "block";
+                answerBox.innerHTML = ` <input type="text" class="styled-input" placeholder="Your answer...">`;
             })
             .catch(err => {
                 resultsEl.innerHTML = "Error: " + err.message;

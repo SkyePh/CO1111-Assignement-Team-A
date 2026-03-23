@@ -110,7 +110,6 @@ function loadQuestion() {
             {
                 questionBox.innerHTML = "Session completed";
                 answerBox.innerHTML = "";
-                stopLocationTracking();
                 if (qrSection) qrSection.style.display = "none";
                 if (qrScannerActive) toggleQrScanner();
 

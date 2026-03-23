@@ -1,0 +1,56 @@
+.user-acceptance-page .container {
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.user-acceptance-page .leaderboard-wrapper {
+    margin-top: 0.5rem;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    overflow-x: auto;
+}
+
+.user-acceptance-page .leaderboard-wrapper table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #1c2541;
+    border-radius: 1rem;
+    overflow: hidden;
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    font-family: 'Inter', sans-serif;
+}
+
+.user-acceptance-page .leaderboard-wrapper th,
+.user-acceptance-page .leaderboard-wrapper td {
+    padding: 12px;
+    text-align: center;
+    vertical-align: top;
+    line-height: 1.5;
+}
+
+.user-acceptance-page .leaderboard-wrapper th:nth-child(2),
+.user-acceptance-page .leaderboard-wrapper td:nth-child(2) {
+    text-align: left;
+}
+
+.user-acceptance-page .leaderboard-wrapper th {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #e9c46a;
+}
+
+.user-acceptance-page .leaderboard-wrapper td {
+    color: #f2ebe3;
+}
+
+.user-acceptance-page .leaderboard-wrapper td:last-child {
+    font-weight: 600;
+    color: #e9c46a;
+}
+
+.user-acceptance-page .leaderboard-wrapper tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+

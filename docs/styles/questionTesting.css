@@ -45,3 +45,46 @@
 .question-testing-page #results .result-error {
     color: #ef4444;
 }
+
+#questionBox {
+    background: #1c2541;
+    padding: 2rem;
+    margin: 1rem 0 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    color: #e9c46a;
+    font-size: 1.3rem;
+    border: 1px solid rgba(212, 175, 55, 0.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    line-height: 1.6;
+    position: relative;
+}
+
+
+#answerBox {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+#answerBox label {
+    display: block;
+    color: #f2ebe3;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.styled-input {
+    width: 100%;
+    max-width: 400px;
+    padding: 1rem 1.5rem;
+    border-radius: 60px;
+    border: 2px solid rgba(212, 175, 55, 0.3);
+    background-color: #111827;
+    color: #f2ebe3;
+    font-size: 1.1rem;
+    margin: 0 auto 1.5rem;
+    display: block;
+    transition: 0.25s;
+    text-align: center;
+}
