@@ -13,8 +13,13 @@ let requiresLocation = false;
 const APP_NAME = "co1111-team-a";
 const form = document.getElementById("startForm");
 const nameInput = document.getElementById("playerName");
+const scoreBox = document.getElementById("scoreBox");
 const scoreValue = document.getElementById("scoreValue");
 title.textContent = currentHuntName;
+
+if (scoreBox) scoreBox.style.display = "none";
+if (questionBox) questionBox.style.display = "none";
+if (answerBox) answerBox.style.display = "none";
 
 //qr scanner settings
 let qrOpts = {
@@ -37,13 +42,49 @@ const qrSection = document.getElementById('qrSection');
 qrPreviewWrapper.style.display = 'none';
 if (qrSection) qrSection.style.display = 'none';
 
+function renderQrContent(content) {
+    const contentEl = document.getElementById("qrContent");
+    if (!contentEl) return;
+
+    contentEl.innerHTML = "";
+    contentEl.classList.remove('qr-placeholder');
+
+    if (/^https?:\/\//i.test(content)) {
+        const link = document.createElement("a");
+        link.href = content;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = content;
+        contentEl.appendChild(link);
+        return;
+    }
+
+    const textNode = document.createElement("span");
+    textNode.textContent = content;
+    contentEl.appendChild(textNode);
+
+    const copyBtn = document.createElement("button");
+    copyBtn.type = "button";
+    copyBtn.textContent = "Copy";
+    copyBtn.className = "base-button secondary-button";
+    copyBtn.style.marginLeft = "8px";
+    copyBtn.style.padding = "4px 8px";
+    copyBtn.style.fontSize = "12px";
+    copyBtn.addEventListener("click", function () {
+        const input = answerBox.querySelector('input:not([type="hidden"]), input[type="hidden"]');
+        if (!input) {
+            showTemporaryError("No answer field available.");
+            return;
+        }
+        input.value = content;
+    });
+
+    contentEl.appendChild(copyBtn);
+}
+
 scanner.addListener('scan', function (content) {
     console.log(content);
-    let contentEl = document.getElementById("qrContent");
-    if (contentEl) {
-        contentEl.innerHTML = content;
-        contentEl.classList.remove('qr-placeholder');
-    }
+    renderQrContent(content);
 });
 
 function toggleQrScanner() {
@@ -85,6 +126,8 @@ function submitAnswer(answer) {
             if (a.status === "OK") {
                 getScore();
                 loadQuestion();
+                let resetQrContent = document.getElementById("qrContent");
+                resetQrContent.innerHTML = '<span class="qr-placeholder">QR Code Content...</span>';
                 form.style.display = "none";
 
                 questionBox.style.display = "block";
@@ -324,6 +367,7 @@ function loadQuestion() {
 }
 
 function startError(errorText){
+    if (questionBox) questionBox.style.display = "block";
     questionBox.innerHTML = errorText;
 }
 
@@ -347,6 +391,8 @@ function skipQuestion(){
             if (b.status === "OK") {
                 getScore();
                 loadQuestion();
+                let resetQrContent = document.getElementById("qrContent");
+                resetQrContent.innerHTML = '<span class="qr-placeholder">QR Code Content...</span>';
             }
             else
                 showTemporaryError("Cannot skip this question.");
@@ -441,6 +487,9 @@ form.addEventListener("submit", function (event) {
             }
 
             form.style.display = "none";
+            if (scoreBox) scoreBox.style.display = "block";
+            if (questionBox) questionBox.style.display = "block";
+            if (answerBox) answerBox.style.display = "block";
             if (qrSection) qrSection.style.display = "block";
             getScore();
             loadQuestion();
